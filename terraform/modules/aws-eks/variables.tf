@@ -15,3 +15,7 @@ variable "app_min_size"            { type = number }
 variable "app_max_size"            { type = number }
 variable "log_retention_days"      { type = number }
 variable "tags"                    { type = map(string) }
+variable "admin_role_arn" {
+  description = "IAM role that should have administrative access to the EKS cluster"
+  type        = string
+}

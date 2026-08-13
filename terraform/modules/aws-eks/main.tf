@@ -42,6 +42,10 @@ resource "aws_eks_cluster" "this" {
   role_arn = aws_iam_role.cluster.arn
   version  = var.kubernetes_version
 
+  access_config {
+    authentication_mode = "API_AND_CONFIG_MAP"
+  }
+
   vpc_config {
     subnet_ids              = concat(var.public_subnet_ids, var.private_subnet_ids)
     endpoint_private_access = var.endpoint_private_access
@@ -62,6 +66,23 @@ resource "aws_eks_cluster" "this" {
   ]
 
   tags = var.tags
+}
+
+resource "aws_eks_access_entry" "admin" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = var.admin_role_arn
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "admin" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = var.admin_role_arn
+
+  policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+
+  access_scope {
+    type = "cluster"
+  }
 }
 
 # Node group IAM role
@@ -100,6 +121,8 @@ resource "aws_eks_node_group" "system" {
   node_role_arn   = aws_iam_role.node_group.arn
   subnet_ids      = var.private_subnet_ids
 
+
+  version    = aws_eks_cluster.this.version
   ami_type       = "AL2023_x86_64_STANDARD"
   capacity_type  = "ON_DEMAND"
   instance_types = var.system_instance_types
@@ -136,6 +159,7 @@ resource "aws_eks_node_group" "application" {
   node_role_arn   = aws_iam_role.node_group.arn
   subnet_ids      = var.private_subnet_ids
 
+  version    = aws_eks_cluster.this.version
   ami_type       = "AL2023_x86_64_STANDARD"
   capacity_type  = "ON_DEMAND"
   instance_types = var.app_instance_types

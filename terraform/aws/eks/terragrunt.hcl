@@ -12,7 +12,7 @@ terraform {
 
 inputs = {
   name                = "multi-cloud-aws"
-  kubernetes_version  = "1.30"
+  kubernetes_version  = "1.32"
 
   public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
   private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
@@ -30,6 +30,8 @@ inputs = {
   app_desired_size   = 3
   app_min_size       = 3
   app_max_size       = 12
+
+  admin_role_arn = "arn:aws:sts::454690830753:assumed-role/AWSReservedSSO_AdministratorAccess_d0464ce5c356f955/customxer@mail.ru"
 
   log_retention_days = 30
 

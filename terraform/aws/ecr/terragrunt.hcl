@@ -3,7 +3,7 @@ include "env" {
 }
 
 terraform {
-  source  = "terraform-aws-modules/ecr/aws"
+  source  = "tfr:///terraform-aws-modules/ecr/aws?version=2.0.0"
 }
 
 inputs = {

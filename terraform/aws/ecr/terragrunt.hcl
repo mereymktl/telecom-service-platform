@@ -4,7 +4,6 @@ include "env" {
 
 terraform {
   source  = "terraform-aws-modules/ecr/aws"
-  version = "~> 2.0"
 }
 
 inputs = {

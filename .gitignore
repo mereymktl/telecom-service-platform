@@ -87,4 +87,5 @@ temp/
 *.bak
 *.orig
 *.md
-*.txt
+STEPS_EXPLANATION.txt
+

@@ -31,7 +31,7 @@ inputs = {
   app_min_size       = 3
   app_max_size       = 12
 
-  admin_role_arn = "arn:aws:sts::454690830753:assumed-role/AWSReservedSSO_AdministratorAccess_d0464ce5c356f955/customxer@mail.ru"
+  admin_role_arn = "arn:aws:iam::454690830753:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d0464ce5c356f955"
 
   log_retention_days = 30
 

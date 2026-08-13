@@ -8,10 +8,12 @@ remote_state {
     encrypt        = true
     use_lockfile   = true
   }
-  generate = { path = "backend.tf"; if_exists = "overwrite_terragrunt" }
+  generate = { path = "backend.tf"
+  if_exists = "overwrite_terragrunt" }
 }
 generate "provider" {
-  path = "provider.tf"; if_exists = "overwrite_terragrunt"
+  path = "provider.tf"
+  if_exists = "overwrite_terragrunt"
   contents = <<-EOT
     terraform {
       required_version = ">= 1.7.0"

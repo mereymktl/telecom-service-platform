@@ -2,11 +2,20 @@ include "env" { path = find_in_parent_folders("terragrunt.hcl") }
 dependency "vpc" { config_path = "../vpc" }
 terraform { source = "../../modules/aws-eks" }
 inputs = {
-  name = "multi-cloud-aws"; kubernetes_version = "1.30"
+  name = "multi-cloud-aws"
+  kubernetes_version = "1.30"
   public_subnet_ids = dependency.vpc.outputs.public_subnet_ids
   private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
-  endpoint_private_access = true; endpoint_public_access = true; public_access_cidrs = ["0.0.0.0/0"]
-  system_instance_types = ["t3.medium"]; system_desired_size = 2; system_min_size = 2; system_max_size = 6
-  app_instance_types = ["t3.large"]; app_desired_size = 3; app_min_size = 3; app_max_size = 12
-  log_retention_days = 30; tags = { Environment = "production"; Project = "multi-cloud-devops" }
+  endpoint_private_access = true; endpoint_public_access = true
+  public_access_cidrs = ["0.0.0.0/0"]
+  system_instance_types = ["t3.medium"]
+  system_desired_size = 2
+  system_min_size = 2; system_max_size = 6
+  app_instance_types = ["t3.large"]
+  app_desired_size = 3
+  app_min_size = 3
+  app_max_size = 12
+  log_retention_days = 30
+  tags = { Environment = "production"
+  Project = "multi-cloud-devops" }
 }

@@ -46,7 +46,7 @@ jobs:
       #  with:
        #   workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
         #  service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-
+        # dummy comment
       - name: Terragrunt Apply
         working-directory: terraform/${{ matrix.environment }}
         run: terragrunt run-all apply -auto-approve -no-color

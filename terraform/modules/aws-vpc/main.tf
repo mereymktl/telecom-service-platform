@@ -84,7 +84,10 @@ resource "aws_nat_gateway" "this" {
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
-  route { cidr_block = "0.0.0.0/0"; gateway_id = aws_internet_gateway.this.id }
+  route { 
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.this.id 
+    }
   tags = merge(var.tags, { Name = "${var.name}-public-rt" })
 }
 
@@ -99,7 +102,10 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.this.id
   dynamic "route" {
     for_each = var.enable_nat_gateway ? [1] : []
-    content { cidr_block = "0.0.0.0/0"; nat_gateway_id = aws_nat_gateway.this[count.index].id }
+    content { 
+      cidr_block = "0.0.0.0/0"
+      nat_gateway_id = aws_nat_gateway.this[count.index].id 
+      }
   }
   tags = merge(var.tags, { Name = "${var.name}-private-rt-${count.index + 1}" })
 }
@@ -121,7 +127,13 @@ resource "aws_vpc_endpoint" "s3" {
 resource "aws_security_group" "vpc_endpoints" {
   name   = "${var.name}-vpc-endpoints-sg"
   vpc_id = aws_vpc.this.id
-  ingress { description = "HTTPS from VPC"; from_port = 443; to_port = 443; protocol = "tcp"; cidr_blocks = [var.vpc_cidr] }
+  ingress { 
+    description = "HTTPS from VPC"
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = [var.vpc_cidr] 
+    }
   tags = merge(var.tags, { Name = "${var.name}-vpc-endpoints-sg" })
 }
 

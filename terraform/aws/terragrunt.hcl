@@ -11,7 +11,7 @@ remote_state {
     key          = "state-folder/${path_relative_to_include()}/terraform.tfstate"
     region       = "eu-central-1"
     encrypt      = true
-    use_lockfile = true
+    dynamodb_table = "terraform-locks"
   }
 
   generate = {

@@ -18,7 +18,7 @@ jobs:
       matrix:
         registry:
           - { name: aws, url: "454690830753.dkr.ecr.eu-west-1.amazonaws.com" }
-          - { name: gcp, url: "europe-west1-docker.pkg.dev/cloud-prod-503017/multi-cloud-app" }
+          #- { name: gcp, url: "europe-west1-docker.pkg.dev/cloud-prod-503017/multi-cloud-app" }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,21 +41,21 @@ jobs:
         if: matrix.registry.name == 'aws'
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Configure GCP Credentials (OIDC)
-        if: matrix.registry.name == 'gcp'
-        id: gcp-auth
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      #- name: Configure GCP Credentials (OIDC)
+       # if: matrix.registry.name == 'gcp'
+        #id: gcp-auth
+        #uses: google-github-actions/auth@v2
+        #with:
+         # workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          #service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-      - name: Login to GCP Artifact Registry
-        if: matrix.registry.name == 'gcp'
-        uses: docker/login-action@v3
-        with:
-          registry: europe-west1-docker.pkg.dev
-          username: oauth2accesstoken
-          password: ${{ steps.gcp-auth.outputs.access_token }}
+      #- name: Login to GCP Artifact Registry
+       # if: matrix.registry.name == 'gcp'
+        #uses: docker/login-action@v3
+        #with:
+         # registry: europe-west1-docker.pkg.dev
+          #username: oauth2accesstoken
+          #password: ${{ steps.gcp-auth.outputs.access_token }}
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
@@ -102,29 +102,29 @@ jobs:
             --namespace=default --record
           kubectl rollout status deployment/multi-cloud-app --namespace=default --timeout=5m
 
-  deploy-gcp:
-    name: "Deploy to GCP GKE"
-    needs: build-push
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  #deploy-gcp:
+   # name: "Deploy to GCP GKE"
+    #needs: build-push
+    #runs-on: ubuntu-latest
+    #steps:
+     # - name: Checkout
+      #  uses: actions/checkout@v4
 
-      - name: Configure GCP Credentials (OIDC)
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      #- name: Configure GCP Credentials (OIDC)
+       # uses: google-github-actions/auth@v2
+        #with:
+         # workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          #service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-      - name: Get GKE Credentials
-        uses: google-github-actions/get-gke-credentials@v2
-        with:
-          cluster_name: multi-cloud-gcp
-          location: europe-west1
+      #- name: Get GKE Credentials
+       # uses: google-github-actions/get-gke-credentials@v2
+        #with:
+         # cluster_name: multi-cloud-gcp
+          #location: europe-west1
 
-      - name: Deploy to GKE
-        run: |
-          kubectl set image deployment/multi-cloud-app \
-            app=europe-west1-docker.pkg.dev/cloud-prod-503017/multi-cloud-app/multi-cloud-app:latest \
-            --namespace=default --record
-          kubectl rollout status deployment/cloud-app --namespace=default --timeout=5m
+      #- name: Deploy to GKE
+       # run: |
+        #  kubectl set image deployment/multi-cloud-app \
+         #   app=europe-west1-docker.pkg.dev/cloud-prod-503017/multi-cloud-app/multi-cloud-app:latest \
+          #  --namespace=default --record
+          #kubectl rollout status deployment/cloud-app --namespace=default --timeout=5m

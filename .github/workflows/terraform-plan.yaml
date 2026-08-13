@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [aws, gcp]
+        environment: [aws]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,12 +40,12 @@ jobs:
           role-session-name: terraform-plan
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Configure GCP Credentials (OIDC)
-        if: matrix.environment == 'gcp'
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      #- name: Configure GCP Credentials (OIDC)
+      #  if: matrix.environment == 'gcp'
+      #  uses: google-github-actions/auth@v2
+      #  with:
+      #    workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+      #    service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: Terragrunt Plan
         working-directory: terraform/${{ matrix.environment }}

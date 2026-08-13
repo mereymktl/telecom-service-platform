@@ -1,0 +1,21 @@
+---
+- name: Common baseline
+  hosts: all
+  become: yes
+  roles:
+    - common
+
+- name: Kubernetes node config
+  hosts: kubernetes_nodes
+  become: yes
+  roles:
+    - common
+    - monitoring
+    - security
+
+- name: Bastion setup
+  hosts: bastion
+  become: yes
+  roles:
+    - common
+    - security

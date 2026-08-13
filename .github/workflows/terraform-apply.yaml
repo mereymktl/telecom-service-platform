@@ -1,0 +1,54 @@
+name: "Terraform Apply"
+on:
+  push:
+    branches: [main]
+    paths: ["terraform/**", ".github/workflows/terraform-apply.yaml"]
+permissions:
+  id-token: write
+  contents: read
+env:
+  TF_VERSION: "1.7.0"
+  TG_VERSION: "0.55.0"
+  AWS_REGION: "eu-west-1"
+jobs:
+  terraform-apply:
+    name: "Terraform Apply"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [aws, gcp]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@v2
+        with:
+          terragrunt_version: ${{ env.TG_VERSION }}
+
+      - name: Configure AWS Credentials (OIDC)
+        if: matrix.environment == 'aws'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: terraform-apply
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure GCP Credentials (OIDC)
+        if: matrix.environment == 'gcp'
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Terragrunt Apply
+        working-directory: terraform/${{ matrix.environment }}
+        run: terragrunt run-all apply -auto-approve -no-color
+        env:
+          TF_IN_AUTOMATION: "true"

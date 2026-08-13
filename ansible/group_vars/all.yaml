@@ -1,0 +1,7 @@
+---
+timezone: "UTC"
+node_exporter_port: 9100
+loki_endpoint: "http://loki-gateway.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+ssh_port: 22
+fail2ban_bantime: 3600
+fail2ban_maxretry: 3

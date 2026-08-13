@@ -1,0 +1,26 @@
+name: "E2E Tests"
+on:
+  workflow_run:
+    workflows: ["Build & Deploy"]
+    types: [completed]
+jobs:
+  e2e:
+    name: "End-to-End Tests"
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      BASE_URL: https://app.multi-cloud-devops.example.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install httpx pytest
+      - name: Health Check
+        run: |
+          curl -f -s -o /dev/null -w "%{http_code}" $BASE_URL/health || exit 1
+          curl -f -s $BASE_URL/metrics | head -20
+          curl -f -s $BASE_URL/api/v1/info | python -m json.tool
+      - name: Validate Metrics
+        run: |
+          RESPONSE=$(curl -s $BASE_URL/metrics)
+          echo "$RESPONSE" | grep -q "http_requests_total" && echo "PASS: metrics found"

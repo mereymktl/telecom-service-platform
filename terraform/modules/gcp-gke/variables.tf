@@ -1,0 +1,16 @@
+variable "name"                     { type = string }
+variable "location"                 { type = string }
+variable "project_id"               { type = string }
+variable "network_name"             { type = string }
+variable "subnet_name"              { type = string }
+variable "enable_private_nodes"     { type = bool }
+variable "enable_private_endpoint"  { type = bool }
+variable "master_ipv4_cidr_block"   { type = string }
+variable "default_pool_count"       { type = number }
+variable "default_pool_min"         { type = number }
+variable "default_pool_max"         { type = number }
+variable "spot_pool_count"          { type = number }
+variable "spot_pool_min"            { type = number }
+variable "spot_pool_max"            { type = number }
+variable "env"                      { type = string }
+variable "team"                     { type = string }

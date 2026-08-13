@@ -1,0 +1,60 @@
+# Grafana Helm values
+# helm install grafana grafana/grafana -f values.yaml -n monitoring
+
+replicas: 2
+
+image:
+  repository: grafana/grafana
+  tag: 11.0.0
+
+persistence:
+  enabled: true
+  storageClassName: gp3
+  size: 10Gi
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: "http://prometheus-kube-prometheus-prometheus.monitoring:9090"
+        access: proxy
+        isDefault: true
+      - name: Loki
+        type: loki
+        url: "http://loki-gateway.monitoring:3100"
+        access: proxy
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder: ""
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+grafana.ini:
+  server:
+    domain: grafana.multi-cloud-devops.example.com
+    root_url: "https://grafana.multi-cloud-devops.example.com"
+  alerting:
+    enabled: true
+
+ingress:
+  enabled: true
+  hosts:
+    - grafana.multi-cloud-devops.example.com

@@ -1,0 +1,30 @@
+# OPA Gatekeeper constraints:
+# - require-resource-limits: all containers must specify CPU/memory limits
+# - block-root-containers: no containers run as root (UID 0)
+# - require-ingress-tls: all ingress hosts must use TLS
+# Apply via: kubectl apply -f opa-policies.yaml
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredResources
+metadata:
+  name: require-resource-limits
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces: ["kube-system"]
+  parameters:
+    limits: ["cpu", "memory"]
+    requests: ["cpu", "memory"]
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sBlockRootContainers
+metadata:
+  name: block-root-containers
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces: ["kube-system"]

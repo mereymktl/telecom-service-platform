@@ -1,0 +1,5 @@
+# OWASP ZAP rules to ignore for the baseline scan
+# Place in .zap/rules.tsv
+# Format: <rule-id>\t<ignored-reason>
+10096\tInformational: Timestamp disclosure - not applicable
+90022\tLow: Application Error Disclosure - expected for /api/v1/error-sim

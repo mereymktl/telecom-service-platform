@@ -1,0 +1,90 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terragrunt-cache/
+crash.log
+crash.*.log
+*.tfplan
+
+# Secrets & Credentials
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account-key.json
+.env
+.env.*
+!.env.example
+secrets.yaml
+*.auto.tfvars
+*.auto.tfvars.json
+!example.auto.tfvars
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+.eggs/
+*.egg-info/
+.venv/
+venv/
+ENV/
+env/
+pip-wheel-metadata/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Ansible
+*.retry
+ansible/inventory/*/hosts.ini
+!ansible/inventory/*/hosts.ini.example
+
+# Kubernetes / Helm
+*.tgz
+charts/*/
+requirements.lock
+Chart.lock
+
+# Docker
+*.dockerignore
+!.dockerignore
+
+# Logs
+*.log
+logs/
+
+# Trivy
+.trivy/
+trivy-results.json
+trivy-results.sarif
+
+# Misc
+tmp/
+temp/
+*.bak
+*.orig
+*.md
+*.txt

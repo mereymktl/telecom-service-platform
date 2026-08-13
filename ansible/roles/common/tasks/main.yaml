@@ -1,0 +1,40 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install base packages
+  apt:
+    name:
+      - curl; wget; vim; htop; iotop
+      - net-tools; tcpdump; dnsutils; jq
+      - python3-pip; unzip; git; chrony
+    state: present
+
+- name: Set timezone to UTC
+  timezone:
+    name: UTC
+
+- name: Enable chrony (NTP)
+  service:
+    name: chrony
+    state: started
+    enabled: yes
+
+- name: Set system limits
+  pam_limits:
+    domain: "*"
+    limit_type: "{{ item.type }}"
+    limit_item: "{{ item.item }}"
+    value: "{{ item.value }}"
+  loop:
+    - { type: soft, item: nofile, value: "65536" }
+    - { type: hard, item: nofile, value: "65536" }
+
+- name: Disable swap (K8s requirement)
+  mount:
+    name: swap
+    fstype: swap
+    state: absent
+  when: "'kubernetes_nodes' in group_names"

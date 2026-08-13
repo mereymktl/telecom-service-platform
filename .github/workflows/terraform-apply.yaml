@@ -49,6 +49,6 @@ jobs:
         # dummy comment
       - name: Terragrunt Apply
         working-directory: terraform/${{ matrix.environment }}
-        run: terragrunt run-all apply -auto-approve -no-color
+        run: terragrunt run-all apply -auto-approve --terragrunt-non-interactive -no-color
         env:
           TF_IN_AUTOMATION: "true"

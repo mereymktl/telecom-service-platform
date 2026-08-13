@@ -49,7 +49,7 @@ jobs:
 
       - name: Terragrunt Plan
         working-directory: terraform/${{ matrix.environment }}
-        run: terragrunt run-all plan -no-color 2>&1 | tee plan-output.txt
+        run: terragrunt run-all plan --terragrunt-non-interactive -no-color 2>&1 | tee plan-output.txt
         env:
           TF_IN_AUTOMATION: "true"
 

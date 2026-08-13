@@ -2,7 +2,7 @@ name: "Build & Deploy"
 on:
   push:
     branches: [main]
-    #paths: ["app/**", "kubernetes/app/**"]
+    paths: ["app/**", "kubernetes/app/**"]
 permissions:
   id-token: write
   contents: read

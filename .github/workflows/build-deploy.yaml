@@ -46,7 +46,7 @@ jobs:
               repository: payload.repository,
               ref: payload.ref
             }, null, 2));
-
+#based on the output of the above step, the new sub is configured in the trust policy of the aws OIDC role.
       - name: Configure AWS Credentials (OIDC)
         if: matrix.registry.name == 'aws'
         uses: aws-actions/configure-aws-credentials@v4
